@@ -1,0 +1,3 @@
+C:/Users/jjosnayo/Desktop/codigo de programacion/repositorios/juegos/marioclon/build/CMakeFiles/mario_game.dir
+C:/Users/jjosnayo/Desktop/codigo de programacion/repositorios/juegos/marioclon/build/CMakeFiles/edit_cache.dir
+C:/Users/jjosnayo/Desktop/codigo de programacion/repositorios/juegos/marioclon/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,18 @@
+CXX = g++
+CXXFLAGS = -Wall -I include
+LDFLAGS = -lmingw32 -lSDL2main -lSDL2
+
+SRC = src/main.cpp src/Game.cpp src/Player.cpp src/Enemy.cpp src/Tile.cpp src/Camera.cpp
+OBJ = $(SRC:.cpp=.o)
+EXEC = mario_game
+
+all: $(EXEC)
+
+$(EXEC): $(OBJ)
+	$(CXX) $(OBJ) -o $@ $(LDFLAGS)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	del /Q src\*.o $(EXEC).exe
