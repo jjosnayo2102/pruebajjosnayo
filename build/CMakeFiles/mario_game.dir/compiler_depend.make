@@ -350,6 +350,7 @@ CMakeFiles/mario_game.dir/src/Game.cpp.obj: C:/Users/jjosnayo/Desktop/codigo\ de
   C:/msys64/mingw64/include/SDL2/SDL_thread.h \
   C:/msys64/mingw64/include/SDL2/SDL_timer.h \
   C:/msys64/mingw64/include/SDL2/SDL_touch.h \
+  C:/msys64/mingw64/include/SDL2/SDL_ttf.h \
   C:/msys64/mingw64/include/SDL2/SDL_version.h \
   C:/msys64/mingw64/include/SDL2/SDL_video.h \
   C:/msys64/mingw64/include/SDL2/begin_code.h \
@@ -1292,6 +1293,7 @@ CMakeFiles/mario_game.dir/src/main.cpp.obj: C:/Users/jjosnayo/Desktop/codigo\ de
   C:/msys64/mingw64/include/SDL2/SDL_thread.h \
   C:/msys64/mingw64/include/SDL2/SDL_timer.h \
   C:/msys64/mingw64/include/SDL2/SDL_touch.h \
+  C:/msys64/mingw64/include/SDL2/SDL_ttf.h \
   C:/msys64/mingw64/include/SDL2/SDL_version.h \
   C:/msys64/mingw64/include/SDL2/SDL_video.h \
   C:/msys64/mingw64/include/SDL2/begin_code.h \
@@ -1672,6 +1674,8 @@ C:/msys64/mingw64/include/c++/15.1.0/bits/basic_ios.tcc:
 C:/msys64/mingw64/include/c++/15.1.0/bits/basic_ios.h:
 
 C:/msys64/mingw64/include/_timeval.h:
+
+C:/msys64/mingw64/include/SDL2/SDL_ttf.h:
 
 C:/Users/jjosnayo/Desktop/codigo\ de\ programacion/repositorios/juegos/marioclon/include/Player.h:
 

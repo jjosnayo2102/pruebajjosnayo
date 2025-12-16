@@ -28,6 +28,14 @@ bool Game::init() {
         std::cerr << "Error al crear renderer: " << SDL_GetError() << std::endl;
         return false;
     }
+    if (TTF_Init() == -1) {
+    std::cout << "Error al inicializar SDL_ttf: " << TTF_GetError() << std::endl;
+    }
+    font = TTF_OpenFont("../assets/PressStart2P-Regular.ttf", 24); 
+    if (!font) {
+    std::cout << "Error al cargar la fuente: " << TTF_GetError() << std::endl;
+    }
+
     map = new TileMap();
     player = new Player(50, 100);   
     enemies.clear(); 
@@ -112,18 +120,28 @@ void Game::restart() {
     std::cout << "¡Juego reiniciado!" << std::endl;
 }
     
-void Game::renderText(const std::string& text, int x, int y, int size) {
-    int startX = x;
-    for (char c : text) {
-        if (c == ' ') {
-            startX += size;
-            continue;
-        }
-        SDL_Rect charRect = {startX, y, size - 2, size};
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderFillRect(renderer, &charRect);
-        startX += size;
+void Game::renderText(const std::string& text, int x, int y, SDL_Color color) {
+    // 1. Validar que la fuente esté cargada
+    if (!font) return;
+    // 2. Crear una superficie con el texto (Surface es CPU, lento)
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), color);
+    if (!textSurface) {
+        std::cout << "Error creando superficie de texto: " << TTF_GetError() << std::endl;
+        return;
     }
+    // 3. Convertir superficie a textura (Texture es GPU, rápido)
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    if (!textTexture) {
+        SDL_FreeSurface(textSurface);
+        return;
+    }
+    // 4. Definir el rectángulo donde se dibujará
+    SDL_Rect renderQuad = { x, y, textSurface->w, textSurface->h };
+    // 5. Renderizar
+    SDL_RenderCopy(renderer, textTexture, NULL, &renderQuad);
+    // 6. Limpiar memoria (¡Muy importante para evitar fugas!)
+    SDL_FreeSurface(textSurface);
+    SDL_DestroyTexture(textTexture);
 }
 
 void Game::render() {
@@ -134,24 +152,35 @@ void Game::render() {
         enemy->render(renderer, camera);
     }    
     player->render(renderer, camera);
-    if (state == WIN) {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+    if (state == WIN || state == GAME_OVER) {
+        // 1. Overlay (Fondo oscuro transparente) - Común para ambos
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200); 
         SDL_Rect overlay = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-        SDL_RenderFillRect(renderer, &overlay);  
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_Rect winBox = {200, 200, 400, 200};
-        SDL_RenderFillRect(renderer, &winBox);
-        renderText("GANASTE!", 280, 250, 30);
-        renderText("Presiona R para reiniciar", 220, 320, 15);
-    } else if (state == GAME_OVER) {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-        SDL_Rect overlay = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-        SDL_RenderFillRect(renderer, &overlay);   
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-        SDL_Rect loseBox = {200, 200, 400, 200};
-        SDL_RenderFillRect(renderer, &loseBox);  
-        renderText("GAME OVER", 250, 250, 30);
-        renderText("Presiona R para reiniciar", 220, 320, 15);
+        SDL_RenderFillRect(renderer, &overlay);
+        // 2. Configurar variables según el estado
+        std::string title;
+        SDL_Color boxColor;
+        int titleX; // Posición X para centrar el título manualmente
+        if (state == WIN) {
+            title = "GANASTE!";
+            boxColor = {0, 255, 0, 255}; // Verde
+            titleX = 280;
+        } else {
+            title = "GAME OVER";
+            boxColor = {255, 0, 0, 255}; // Rojo
+            titleX = 280;
+        }
+        // 3. Dibujar la caja de mensaje
+        SDL_SetRenderDrawColor(renderer, boxColor.r, boxColor.g, boxColor.b, boxColor.a);
+        SDL_Rect msgBox = {200, 200, 400, 200};
+        SDL_RenderFillRect(renderer, &msgBox);
+        // 4. Renderizar textos usando SDL_ttf
+        SDL_Color white = {255, 255, 255, 255};
+        // Título principal
+        renderText(title, titleX, 250, white);
+        // Subtítulo (Instrucción) - Es igual para ambos
+        renderText("Presiona [R]", 250, 310, white); // X más al centro
+        renderText("para reiniciar", 235, 345, white); // Debajo de la anterior
     }
     SDL_RenderPresent(renderer);
 }
@@ -173,7 +202,9 @@ void Game::clean() {
     if (player) delete player;
     if (map) delete map;
     for (Enemy* enemy : enemies) delete enemy;
+    if (font) TTF_CloseFont(font);
     if (renderer) SDL_DestroyRenderer(renderer);
     if (window) SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
 }

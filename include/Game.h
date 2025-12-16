@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include "Constants.h"
 #include "Player.h"
@@ -19,6 +20,7 @@ class Game {
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
+    TTF_Font* font;
     bool isRunning;
     Uint32 frameStart;
     int frameTime;
@@ -42,7 +44,7 @@ private:
     void update();
     void render();
     void restart();
-    void renderText(const std::string& text, int x, int y, int size);
+    void renderText(const std::string& text, int x, int y, SDL_Color color);
 };
 
 #endif

@@ -256,6 +256,8 @@ CMakeFiles/mario_game.dir/src/Game.cpp.obj: \
  C:/msys64/mingw64/include/SDL2/SDL_version.h \
  C:/msys64/mingw64/include/SDL2/SDL_locale.h \
  C:/msys64/mingw64/include/SDL2/SDL_misc.h \
+ C:/msys64/mingw64/include/SDL2/SDL_ttf.h \
+ C:/msys64/mingw64/include/SDL2/SDL.h \
  C:/msys64/mingw64/include/c++/15.1.0/iostream \
  C:/msys64/mingw64/include/c++/15.1.0/ostream \
  C:/msys64/mingw64/include/c++/15.1.0/bits/ostream.h \
